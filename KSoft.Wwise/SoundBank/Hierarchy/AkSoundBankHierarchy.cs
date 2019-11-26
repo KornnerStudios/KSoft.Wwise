@@ -1,6 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Contract = System.Diagnostics.Contracts.Contract;
+﻿using System.Collections.Generic;
+#if CONTRACTS_FULL_SHIM
+using Contract = System.Diagnostics.ContractsShim.Contract;
+#else
+using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
+#endif
 
 namespace KSoft.Wwise.SoundBank
 {
@@ -40,9 +43,9 @@ namespace KSoft.Wwise.SoundBank
 			#endregion
 		};
 
-		Dictionary<HircType, Dictionary<uint, AkSoundBankHierarchyObjectBase>> mObjects = 
+		Dictionary<HircType, Dictionary<uint, AkSoundBankHierarchyObjectBase>> mObjects =
 			new Dictionary<HircType, Dictionary<uint, AkSoundBankHierarchyObjectBase>>();
-		Dictionary<uint, AkSoundBankHierarchyObjectBase> mIdToObject = 
+		Dictionary<uint, AkSoundBankHierarchyObjectBase> mIdToObject =
 			new Dictionary<uint, AkSoundBankHierarchyObjectBase>();
 
 		public void CopyObjectsTo(FilePackage.AkFilePackageExtractor extractor)

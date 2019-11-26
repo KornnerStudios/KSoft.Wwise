@@ -1,4 +1,8 @@
-﻿using Contract = System.Diagnostics.Contracts.Contract;
+﻿#if CONTRACTS_FULL_SHIM
+using Contract = System.Diagnostics.ContractsShim.Contract;
+#else
+using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
+#endif
 
 namespace KSoft.Wwise.SoundBank
 {
@@ -95,7 +99,7 @@ namespace KSoft.Wwise.SoundBank
 		}
 		void SerializeRTPC(IO.EndianStream s)
 		{
-			const int k_size_of = 
+			const int k_size_of =
 				4 + // FXID
 				1 + // FXIndex
 				4 + // RTPCID
