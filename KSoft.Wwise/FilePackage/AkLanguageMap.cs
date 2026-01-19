@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace KSoft.Wwise.FilePackage
 {
 	public sealed class AkLanguageMap
@@ -10,7 +8,7 @@ namespace KSoft.Wwise.FilePackage
 
 		AkLanguageMapEntry[] mEntries;
 
-		bool mUseAsciiStrings;
+		readonly bool mUseAsciiStrings;
 
 		public AkLanguageMap(bool useAsciiStrings)
 		{
@@ -25,7 +23,9 @@ namespace KSoft.Wwise.FilePackage
 
 			uint result = sizeof(uint) + (uint)(mEntries.Length * AkLanguageMapEntry.kSizeOf);
 			foreach (var se in mEntries)
+			{
 				result += (uint)(se.Value.Length + 1) * char_size;
+			}
 
 			return result;
 		}
@@ -35,7 +35,9 @@ namespace KSoft.Wwise.FilePackage
 		{
 			Memory.Strings.StringStorage ss;
 			if (mUseAsciiStrings)
+			{
 				ss = Memory.Strings.StringStorage.CStringAscii;
+			}
 			else
 			{
 				ss = s.ByteOrder == Shell.EndianFormat.Little
@@ -45,7 +47,9 @@ namespace KSoft.Wwise.FilePackage
 
 			s.StreamArrayInt32(ref mEntries);
 			for (int x = 0; x < mEntries.Length; x++)
+			{
 				s.Stream(ref mEntries[x].Value, ss);
+			}
 		}
 		#endregion
 	};

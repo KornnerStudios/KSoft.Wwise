@@ -9,9 +9,9 @@ namespace KSoft.Wwise.SoundBank
 	sealed class AkSoundBankStringMapping
 		: AkSoundBankStringMappingBase
 	{
-		static readonly Memory.Strings.StringStorage kStringStorage =
-					new Memory.Strings.StringStorage(Memory.Strings.StringStorageWidthType.Ascii, Memory.Strings.StringStorageLengthPrefix.Int8);
-		static readonly Text.StringStorageEncoding kStringEncoding = new Text.StringStorageEncoding(kStringStorage);
+		static readonly Memory.Strings.StringStorage kStringStorage = new(
+			Memory.Strings.StringStorageWidthType.Ascii, Memory.Strings.StringStorageLengthPrefix.Int8);
+		static readonly Text.StringStorageEncoding kStringEncoding = new(kStringStorage);
 
 		void SerializeStringType(IO.EndianStream s, AKBKHashHeader hdr, AkSoundBank bank)
 		{
@@ -29,17 +29,19 @@ namespace KSoft.Wwise.SoundBank
 		{
 			Contract.Assert(s.IsReading);
 
-			var bank = s.Owner as AkSoundBank;
+			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner);
 
 			long eos = EndOfStream(s, header);
 
 			while (s.BaseStream.Position != eos)
 			{
-				AKBKHashHeader hdr = new AKBKHashHeader();
+				AKBKHashHeader hdr = new();
 				hdr.Serialize(s);
 
 				for (int x = 0; x < hdr.Size; x++)
+				{
 					SerializeStringType(s, hdr, bank);
+				}
 			}
 		}
 	};

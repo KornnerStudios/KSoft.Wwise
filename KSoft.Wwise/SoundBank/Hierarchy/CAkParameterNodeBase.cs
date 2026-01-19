@@ -13,6 +13,7 @@ namespace KSoft.Wwise.SoundBank
 			: IO.IEndianStreamSerializable
 		{
 			#region IEndianStreamSerializable Members
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0251:Make member 'readonly'")]
 			public void Serialize(IO.EndianStream s)
 			{
 				s.Pad8(); // FXIndex
@@ -29,6 +30,7 @@ namespace KSoft.Wwise.SoundBank
 			internal const uint kSizeOf = 9;
 
 			#region IEndianStreamSerializable Members
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0251:Make member 'readonly'")]
 			public void Serialize(IO.EndianStream s)
 			{
 				s.Pad32(); // State
@@ -59,8 +61,10 @@ namespace KSoft.Wwise.SoundBank
 			s.Stream(ref NumFx);
 			Contract.Assert(NumFx <= 4);
 			if (s.IsReading)
+			{
 				FX = new FXData[NumFx];
-			if (NumFx > 0) s.Pad8(); // bitsFXBypass
+			}
+			if (NumFx > 0) { s.Pad8(); } // bitsFXBypass
 			s.StreamArray(FX);
 		}
 		void SerializeParams(IO.EndianStream s)
@@ -114,7 +118,10 @@ namespace KSoft.Wwise.SoundBank
 		}
 		void SerializeFeedbackInfo(IO.EndianStream s)
 		{
-			if (!(s.Owner as AkSoundBank).HasFeedback) return;
+			if (!KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner).HasFeedback)
+			{
+				return;
+			}
 
 			s.Pad32(); // BusId
 			s.Pad32(); // float FeedbackVolume

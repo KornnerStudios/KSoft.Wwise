@@ -29,10 +29,12 @@ namespace KSoft.Wwise.SoundBank
 			}
 			public void Serialize(IO.EndianStream s)
 			{
-				uint sdk_ver = (s.Owner as AkSoundBank).SdkVersion;
+				uint sdk_ver = (KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner)).SdkVersion;
 
 				if (AkVersion.HasOldBankHeader(sdk_ver))
+				{
 					SerializeOld(s);
+				}
 				else
 				{
 					s.Stream(ref BankGeneratorVersion);

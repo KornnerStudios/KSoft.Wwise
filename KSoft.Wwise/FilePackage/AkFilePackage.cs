@@ -8,18 +8,16 @@ namespace KSoft.Wwise.FilePackage
 		internal AkFilePackageSettings Settings { get; private set; }
 
 		AkFilePackageHeader mHeader;
-		AkLanguageMap mLangMap;
-		AkFileLookupTable mSoundBanksTable;
-		AkFileLookupTable mStreamedFilesTable;
-		AkFileLookupTable mExternalFilesTable;
+		readonly AkLanguageMap mLangMap;
+		readonly AkFileLookupTable mSoundBanksTable = new();
+		readonly AkFileLookupTable mStreamedFilesTable = new();
+		readonly AkFileLookupTable mExternalFilesTable;
 
 		SoundBank.AkSoundBank[] mSoundBanks;
 		Dictionary<uint, string> mIdToName;
 		List<KeyValuePair<uint, string>> mIdToNameDups;
 
-		bool HasExternalFiles { get {
-			return mExternalFilesTable != null;
-		} }
+		bool HasExternalFiles => mExternalFilesTable != null;
 
 		public AkFilePackage(AkFilePackageSettings settings)
 		{
@@ -27,26 +25,28 @@ namespace KSoft.Wwise.FilePackage
 
 			mLangMap = new AkLanguageMap(settings.UseAsciiStrings);
 
-			mSoundBanksTable = new AkFileLookupTable();
-			mStreamedFilesTable = new AkFileLookupTable();
-
 			if (AkVersion.HasExternalFiles(settings.SdkVersion))
+			{
 				mExternalFilesTable = new AkFileLookupTable();
+			}
 		}
 
-		public IReadOnlyDictionary<uint, string> IdToName { get { return mIdToName; } }
-		public IEnumerable<SoundBank.AkSoundBank> SoundBanks { get { return mSoundBanks; } }
+		public IReadOnlyDictionary<uint, string> IdToName => mIdToName;
+		public IEnumerable<SoundBank.AkSoundBank> SoundBanks => mSoundBanks;
 
 		internal void MapIdToName(uint id, string name)
 		{
-			string existing_name;
-			if (mIdToName.TryGetValue(id, out existing_name))
+			if (mIdToName.TryGetValue(id, out string existing_name))
 			{
 				if (existing_name != name)
+				{
 					mIdToNameDups.Add(new KeyValuePair<uint, string>(id, name));
+				}
 			}
 			else
+			{
 				mIdToName.Add(id, name);
+			}
 		}
 
 		internal AkFileLookupTableEntry FindStreamedFileById(ulong streamedFileId)
@@ -59,18 +59,20 @@ namespace KSoft.Wwise.FilePackage
 		{
 			s.Owner = this;
 
-			if(s.IsWriting)
+			if (s.IsWriting)
+			{
 				mHeader.InitializeSize(Settings.SdkVersion, mLangMap.TotalMapSize);
+			}
 
 			s.Stream(ref mHeader);
 			s.Stream(ref mLangMap.TotalMapSize);
 			s.Stream(ref mSoundBanksTable.TotalSize);
 			s.Stream(ref mStreamedFilesTable.TotalSize);
-			if (HasExternalFiles) s.Stream(ref mExternalFilesTable.TotalSize);
+			if (HasExternalFiles) { s.Stream(ref mExternalFilesTable.TotalSize); }
 			s.Stream(mLangMap);
 			s.Stream(mSoundBanksTable);
 			s.Stream(mStreamedFilesTable);
-			if (HasExternalFiles) s.Stream(mExternalFilesTable);
+			if (HasExternalFiles) { s.Stream(mExternalFilesTable); }
 		}
 
 		public void SerializeSoundBanks(IO.EndianStream s)
@@ -88,7 +90,9 @@ namespace KSoft.Wwise.FilePackage
 			}
 
 			for (int x = 0; x < mSoundBanks.Length; x++)
+			{
 				s.Stream(mSoundBanks[x]);
+			}
 
 			mSoundBanks.ToString();
 		}

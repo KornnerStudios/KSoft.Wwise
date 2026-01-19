@@ -10,7 +10,7 @@ namespace KSoft.Wwise.SoundBank
 		class AkSoundBankHierarchyDefaultImpl
 			: AkSoundBankHierarchyObjectBase
 		{
-			HircType mType;
+			readonly HircType mType;
 
 			public AkSoundBankHierarchyDefaultImpl(HircType type)
 			{
@@ -25,15 +25,14 @@ namespace KSoft.Wwise.SoundBank
 
 		public static AkSoundBankHierarchyObjectBase New(HircType type)
 		{
-			switch (type)
+			return type switch
 			{
-			case HircType.Sound:		return new AkSoundBankHierarchySound();
-			case HircType.Action:		return new AkSoundBankHierarchyAction();
-			case HircType.Event:		return new AkSoundBankHierarchyEvent();
-			case HircType.RanSeqCntr:	return new AkSoundBankHierarchyRanSeqCntr();
-
-			default:					return new AkSoundBankHierarchyDefaultImpl(type);
-			}
+				HircType.Sound =>		new AkSoundBankHierarchySound(),
+				HircType.Action =>		new AkSoundBankHierarchyAction(),
+				HircType.Event =>		new AkSoundBankHierarchyEvent(),
+				HircType.RanSeqCntr =>	new AkSoundBankHierarchyRanSeqCntr(),
+				_ =>					new AkSoundBankHierarchyDefaultImpl(type),
+			};
 		}
 		#endregion
 

@@ -3,12 +3,14 @@ namespace KSoft.Wwise
 {
 	public static class AkVersion
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
 		static class k2006
 		{
 			//2006.2
 			//2006.3
 			//2006.3.1
 		};
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
 		public static class k2007
 		{
 			public const uint Id = 0x20070000;
@@ -22,6 +24,7 @@ namespace KSoft.Wwise
 			// Based on the changelog for 2007.4, it looks like this is from an earlier build
 			public const uint BankGenerator = 0x1A; // HaloWars alpha2 build
 		};
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
 		public static class k2008
 		{
 			public const uint Id = 0x20080000;
@@ -33,6 +36,7 @@ namespace KSoft.Wwise
 			//2008.4
 			public const uint BankGenerator = 0x22; //34 HaloWars retail
 		};
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
 		public static class k2009
 		{
 			public const uint Id = 0x20090000;
@@ -42,6 +46,7 @@ namespace KSoft.Wwise
 			//2009.2.1
 			//2009.3
 		};
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
 		public static class k2010
 		{
 			//2010.1
@@ -54,6 +59,7 @@ namespace KSoft.Wwise
 			//2010.3.2
 			public const uint BankGenerator_3_3 = 0x35; //53 3773
 		};
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
 		public static class k2011
 		{
 			public const uint Id = 0x20110000;
@@ -67,6 +73,7 @@ namespace KSoft.Wwise
 			//2011.3
 			//2011.3.1
 		};
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
 		public static class k2012
 		{
 			public const uint Id = 0x20120000;
@@ -82,13 +89,13 @@ namespace KSoft.Wwise
 		};
 
 		// Based on HaloWars's alpha2 build
-		internal static bool BankHasOldSTID(uint generatorVersion) { return generatorVersion <= k2007.BankGenerator; }
-		internal static bool HasOldBankHeader(uint sdkVersion) { return sdkVersion < k2008.Id; }
+		internal static bool BankHasOldSTID(uint generatorVersion) => generatorVersion <= k2007.BankGenerator;
+		internal static bool HasOldBankHeader(uint sdkVersion) => sdkVersion < k2008.Id;
 
-		internal static bool HasExternalFiles(uint sdkVersion) { return sdkVersion >= k2011._2_Id; }
-		internal static bool HasWordSizeDependentLUT(uint sdkVersion) { return sdkVersion >= k2011._2_Id; }
+		internal static bool HasExternalFiles(uint sdkVersion) => sdkVersion >= k2011._2_Id;
+		internal static bool HasWordSizeDependentLUT(uint sdkVersion) => sdkVersion >= k2011._2_Id;
 
-		// TODO: verify when this was added
-		internal static bool HircTypeIs8bit(uint sdkVersion) { return sdkVersion >= k2012.Id; }
+		// #TODO: verify when this was added
+		internal static bool HircTypeIs8bit(uint sdkVersion) => sdkVersion >= k2012.Id;
 	};
 }

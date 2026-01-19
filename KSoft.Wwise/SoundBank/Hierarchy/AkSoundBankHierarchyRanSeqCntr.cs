@@ -4,7 +4,7 @@ namespace KSoft.Wwise.SoundBank
 	sealed class AkSoundBankHierarchyRanSeqCntr
 		: AkSoundBankHierarchyObjectBase
 	{
-		public CAkParameterNodeBase ParameterNode = new CAkParameterNodeBase();
+		public CAkParameterNodeBase ParameterNode = new();
 		public AkPlaylistItem[] Playlist;
 
 		void SerializeHack2008(IO.EndianStream s)
@@ -31,7 +31,8 @@ namespace KSoft.Wwise.SoundBank
 			bool read_playlist = false;
 
 			s.Seek(s.VirtualBufferStart + s.VirtualBufferLength);
-			do{
+			do
+			{
 				s.Seek(k_seek_amount, System.IO.SeekOrigin.Current);
 				if (s.Reader.ReadInt32() == item_count)
 				{
@@ -40,7 +41,7 @@ namespace KSoft.Wwise.SoundBank
 				}
 
 				item_count++;
-			}while(s.BaseStream.Position > terminator);
+			} while(s.BaseStream.Position > terminator);
 
 			if (read_playlist)
 			{
@@ -52,10 +53,12 @@ namespace KSoft.Wwise.SoundBank
 		{
 			base.Serialize(s);
 
-			uint gen_ver = (s.Owner as AkSoundBank).GeneratorVersion;
+			uint gen_ver = (KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner)).GeneratorVersion;
 
 			if (gen_ver == AkVersion.k2008.BankGenerator)
+			{
 				SerializeReverseHack2008(s);
+			}
 			else
 			{
 				s.Stream(ParameterNode);

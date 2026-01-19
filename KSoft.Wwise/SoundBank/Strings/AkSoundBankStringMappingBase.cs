@@ -6,15 +6,17 @@ namespace KSoft.Wwise.SoundBank
 
 	partial class AkSoundBankObjectBase
 	{
-		static readonly Values.GroupTagData32 kStringMappingSignature =
-					new Values.GroupTagData32("STID", "audiokinetic_string_mapping"); // BankStrMapChunkID
+		static readonly Values.GroupTagData32 kStringMappingSignature = new(
+			"STID", "audiokinetic_string_mapping"); // BankStrMapChunkID
 
-		static readonly AkSoundBankStringMapping kBankNamesMappingObject = new AkSoundBankStringMapping();
+		static readonly AkSoundBankStringMapping kBankNamesMappingObject = new();
 
 		static AkSoundBankObjectBase NewSTID(uint generatorVersion)
 		{
 			if (AkVersion.BankHasOldSTID(generatorVersion))
+			{
 				return new AkSoundBankStringMapping2007();
+			}
 
 			return kBankNamesMappingObject;
 		}

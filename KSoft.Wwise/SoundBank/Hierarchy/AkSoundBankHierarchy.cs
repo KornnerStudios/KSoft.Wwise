@@ -12,12 +12,16 @@ namespace KSoft.Wwise.SoundBank
 
 	partial class AkSoundBankObjectBase
 	{
-		static readonly Values.GroupTagData32 kHierarchySignature =
-					new Values.GroupTagData32("HIRC", "audiokinetic_hierarchy"); // BankHierarchyChunkID
+		static readonly Values.GroupTagData32 kHierarchySignature = new(
+			"HIRC", "audiokinetic_hierarchy"); // BankHierarchyChunkID
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1859:Use concrete types when possible for improved performance")]
 		static AkSoundBankObjectBase NewHIRC(uint generatorVersion)
 		{
-			return new AkSoundBankHierarchy();
+			return generatorVersion switch
+			{
+				_ => new AkSoundBankHierarchy(),
+			};
 		}
 	};
 
@@ -33,7 +37,7 @@ namespace KSoft.Wwise.SoundBank
 			#region IEndianStreamSerializable Members
 			public void Serialize(IO.EndianStream s)
 			{
-				uint sdk_ver = (s.Owner as AkSoundBank).SdkVersion;
+				uint sdk_ver = (KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner)).SdkVersion;
 
 				s.Stream(ref Type, AkVersion.HircTypeIs8bit(sdk_ver)
 					? HircTypeStreamer8.Instance
@@ -43,10 +47,8 @@ namespace KSoft.Wwise.SoundBank
 			#endregion
 		};
 
-		Dictionary<HircType, Dictionary<uint, AkSoundBankHierarchyObjectBase>> mObjects =
-			new Dictionary<HircType, Dictionary<uint, AkSoundBankHierarchyObjectBase>>();
-		Dictionary<uint, AkSoundBankHierarchyObjectBase> mIdToObject =
-			new Dictionary<uint, AkSoundBankHierarchyObjectBase>();
+		readonly Dictionary<HircType, Dictionary<uint, AkSoundBankHierarchyObjectBase>> mObjects = new();
+		readonly Dictionary<uint, AkSoundBankHierarchyObjectBase> mIdToObject = new();
 
 		public void CopyObjectsTo(FilePackage.AkFilePackageExtractor extractor)
 		{
@@ -55,11 +57,15 @@ namespace KSoft.Wwise.SoundBank
 				var type = kv.Key;
 
 				if (type == HircType.Attenuation)
+				{
 					continue;
+				}
 
-				Dictionary<uint, AkSoundBankHierarchyObjectBase> dic;
-				if (!extractor.mObjects.TryGetValue(type, out dic))
+				if (!extractor.mObjects.TryGetValue(type,
+						out Dictionary<uint, AkSoundBankHierarchyObjectBase> dic))
+				{
 					extractor.mObjects.Add(type, dic = new Dictionary<uint, AkSoundBankHierarchyObjectBase>());
+				}
 
 				foreach (var obj in kv.Value)
 				{
@@ -77,9 +83,11 @@ namespace KSoft.Wwise.SoundBank
 
 		void MapObject(HircType type, AkSoundBankHierarchyObjectBase obj)
 		{
-			Dictionary<uint, AkSoundBankHierarchyObjectBase> dic;
-			if (!mObjects.TryGetValue(type, out dic))
+			if (!mObjects.TryGetValue(type,
+					out Dictionary<uint, AkSoundBankHierarchyObjectBase> dic))
+			{
 				mObjects.Add(type, dic = new Dictionary<uint, AkSoundBankHierarchyObjectBase>());
+			}
 
 			dic.Add(obj.ID, obj);
 			mIdToObject.Add(obj.ID, obj);
@@ -103,13 +111,15 @@ namespace KSoft.Wwise.SoundBank
 		}
 		void FromStream(IO.EndianStream s, AkSubchunkHeader header)
 		{
-			var bank = s.Owner as AkSoundBank;
+			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner);
+			Util.MarkUnusedVariable(ref bank);
 
 			using (s.EnterVirtualBufferWithBookmark(header.ChunkSize))
 			{
 				for (int x = 0, num_hirc_items = s.Reader.ReadInt32(); x < num_hirc_items; x++)
 				{
-					var section = new AKBKSubHircSection(); section.Serialize(s);
+					var section = new AKBKSubHircSection();
+					section.Serialize(s);
 
 					SerializeItem(s, section);
 				}
@@ -118,7 +128,9 @@ namespace KSoft.Wwise.SoundBank
 		public override void Serialize(IO.EndianStream s, AkSubchunkHeader header)
 		{
 			if (s.IsReading)
+			{
 				FromStream(s, header);
+			}
 		}
 		#endregion
 
@@ -127,10 +139,14 @@ namespace KSoft.Wwise.SoundBank
 			foreach (var kv in mObjects)
 			{
 				if (kv.Key != HircType.Sound)
+				{
 					continue;
+				}
 
-				foreach(var dic in kv.Value)
-					((AkSoundBankHierarchySound)dic.Value).PrepareForExtraction(bank);
+				foreach (var dic in kv.Value)
+				{
+					KSoft.Debug.TypeCheck.CastReference<AkSoundBankHierarchySound>(dic.Value).PrepareForExtraction(bank);
+				}
 			}
 		}
 	};

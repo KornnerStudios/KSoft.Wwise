@@ -17,6 +17,6 @@ namespace KSoft.Wwise
 		}
 		#endregion
 
-		public override int GetHashCode() { return (int)Tag; }
+		public override readonly int GetHashCode() => (int)Tag;
 	};
 }

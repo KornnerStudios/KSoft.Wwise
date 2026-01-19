@@ -30,7 +30,7 @@ namespace KSoft.Wwise.SoundBank
 			AKBKHashHeader mHeader;
 			public StringHashEntry[] Entries;
 
-			public uint ID { get { return mHeader.Hash; } }
+			public uint ID => mHeader.Hash;
 
 			#region IEndianStreamSerializable Members
 			void SerializeGroupEntries(IO.EndianStream s)
@@ -77,6 +77,8 @@ namespace KSoft.Wwise.SoundBank
 		}
 		void SerializeStringType(IO.EndianStream s, AKBKHashHeader hdr, AkSoundBank bank)
 		{
+			Util.MarkUnusedVariable(ref bank);
+
 			switch (hdr.Type)
 			{
 				case AkSoundBankStringMappingBase.StringType.OldEvents:
@@ -89,13 +91,13 @@ namespace KSoft.Wwise.SoundBank
 		{
 			Contract.Assert(s.IsReading);
 
-			var bank = s.Owner as AkSoundBank;
+			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner);
 
 			long eos = EndOfStream(s, header);
 
 			while (s.BaseStream.Position != eos)
 			{
-				AKBKHashHeader hdr = new AKBKHashHeader();
+				AKBKHashHeader hdr = new();
 				hdr.Serialize(s);
 
 				SerializeStringType(s, hdr, bank);

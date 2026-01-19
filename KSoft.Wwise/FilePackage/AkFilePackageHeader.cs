@@ -6,7 +6,7 @@ namespace KSoft.Wwise.FilePackage
 	{
 		const uint kSizeOfHeader = AkSubchunkHeader.kSizeOf + sizeof(int);
 
-		static readonly Values.GroupTagData32 kSignature = new Values.GroupTagData32("AKPK", "audiokinetic_package");
+		static readonly Values.GroupTagData32 kSignature = new("AKPK", "audiokinetic_package");
 		const uint kVersion = 1;
 
 		public uint HeaderSize;
@@ -19,7 +19,9 @@ namespace KSoft.Wwise.FilePackage
 			HeaderSize += sizeof(uint); // field for LUT size (sound banks)
 			HeaderSize += sizeof(uint); // field for LUT size (streamed files)
 			if (AkVersion.HasExternalFiles(sdkVersion))
+			{
 				HeaderSize += sizeof(uint); // field for LUT size (external files)
+			}
 			HeaderSize += langMapTotalSize;
 		}
 

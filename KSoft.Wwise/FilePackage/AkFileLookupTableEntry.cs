@@ -19,7 +19,7 @@ namespace KSoft.Wwise.FilePackage
 		[FieldOffset(0x18)] public uint StartingBlock;
 		[FieldOffset(0x1C)] public uint LanguageId;
 
-		public long FileOffset { get { return StartingBlock * BlockSize; } }
+		public readonly long FileOffset => StartingBlock * BlockSize;
 
 		#region IEndianStreamSerializable Members
 		void SerializePre2011_2(IO.EndianStream s)
@@ -34,34 +34,40 @@ namespace KSoft.Wwise.FilePackage
 		}
 		void Serialize64(IO.EndianStream s)
 		{
-			s.Stream(ref FileId64); s.Stream(ref BlockSize); s.Stream(ref FileSize32); 
+			s.Stream(ref FileId64); s.Stream(ref BlockSize); s.Stream(ref FileSize32);
 			s.Stream(ref StartingBlock);
 			s.Stream(ref LanguageId);
 		}
 
 		public void Serialize(IO.EndianStream s)
 		{
-			var settings = (s.Owner as AkFilePackage).Settings;
+			var settings = (KSoft.Debug.TypeCheck.CastReference<AkFilePackage>(s.Owner)).Settings;
 
 			if (AkVersion.HasWordSizeDependentLUT(settings.SdkVersion))
 			{
 				if (settings.Platform.ProcessorType.ProcessorSize == Shell.ProcessorSize.x32)
+				{
 					Serialize32(s);
+				}
 				else
+				{
 					Serialize64(s);
+				}
 			}
 			else
+			{
 				SerializePre2011_2(s);
+			}
 		}
 		#endregion
 
 		#region IComparable<FileEntry> Members
-		public int CompareTo(AkFileLookupTableEntry other)
+		public readonly int CompareTo(AkFileLookupTableEntry other)
 		{
-			if (this.FileId64 < other.FileId64) return -1;
-			if (this.FileId64 > other.FileId64) return 1;
-			if (this.LanguageId < other.LanguageId) return -1;
-			if (this.LanguageId > other.LanguageId) return 1;
+			if (this.FileId64 < other.FileId64) { return -1; }
+			if (this.FileId64 > other.FileId64) { return 1; }
+			if (this.LanguageId < other.LanguageId) { return -1; }
+			if (this.LanguageId > other.LanguageId) { return 1; }
 
 			return 0;
 		}
