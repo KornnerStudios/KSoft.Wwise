@@ -1,9 +1,4 @@
 ﻿using System.Collections.Generic;
-#if CONTRACTS_FULL_SHIM
-using Contract = System.Diagnostics.ContractsShim.Contract;
-#else
-using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
-#endif
 
 namespace KSoft.Wwise.SoundBank
 {
@@ -96,7 +91,12 @@ namespace KSoft.Wwise.SoundBank
 		#region IEndianStreamSerializable Members
 		void SerializeItem(IO.EndianStream s, AKBKSubHircSection section)
 		{
-			Contract.Assert(s.IsReading);
+			if (!s.IsReading)
+			{
+				throw new System.InvalidOperationException(string.Format(
+					"Hierarchy item serialization requires a readable stream; stream mode is {0}.",
+					s.StreamMode));
+			}
 
 			using (s.EnterVirtualBufferWithBookmark(section.SectionSize))
 			{

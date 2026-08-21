@@ -1,10 +1,4 @@
-﻿#if CONTRACTS_FULL_SHIM
-using Contract = System.Diagnostics.ContractsShim.Contract;
-#else
-using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
-#endif
-
-namespace KSoft.Wwise.SoundBank
+﻿namespace KSoft.Wwise.SoundBank
 {
 	public class CAkParameterNodeBase
 		: IO.IEndianStreamSerializable
@@ -59,7 +53,12 @@ namespace KSoft.Wwise.SoundBank
 		{
 			s.Pad8(); // IsOverrideParentFX
 			s.Stream(ref NumFx);
-			Contract.Assert(NumFx <= 4);
+			if (NumFx > 4)
+			{
+				throw new System.IO.InvalidDataException(string.Format(
+					"Parameter node FX count is {0}, maximum is 4.",
+					NumFx));
+			}
 			if (s.IsReading)
 			{
 				FX = new FXData[NumFx];
@@ -86,7 +85,7 @@ namespace KSoft.Wwise.SoundBank
 		void SerializePositioningParams(IO.EndianStream s)
 		{
 			s.Stream(ref PositioningInfoOverrideParent);
-			Contract.Assert(!PositioningInfoOverrideParent);
+			System.Diagnostics.Debug.Assert(!PositioningInfoOverrideParent);
 			if (PositioningInfoOverrideParent)
 			{
 				s.Pad32(); // CenterPct

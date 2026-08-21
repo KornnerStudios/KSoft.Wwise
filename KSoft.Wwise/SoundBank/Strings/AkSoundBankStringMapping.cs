@@ -1,10 +1,4 @@
-﻿#if CONTRACTS_FULL_SHIM
-using Contract = System.Diagnostics.ContractsShim.Contract;
-#else
-using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
-#endif
-
-namespace KSoft.Wwise.SoundBank
+﻿namespace KSoft.Wwise.SoundBank
 {
 	sealed class AkSoundBankStringMapping
 		: AkSoundBankStringMappingBase
@@ -15,7 +9,13 @@ namespace KSoft.Wwise.SoundBank
 
 		void SerializeStringType(IO.EndianStream s, AKBKHashHeader hdr, AkSoundBank bank)
 		{
-			Contract.Assert(hdr.Type == AkSoundBankStringMappingBase.StringType.Bank);
+			if (hdr.Type != AkSoundBankStringMappingBase.StringType.Bank)
+			{
+				throw new System.IO.InvalidDataException(string.Format(
+					"String mapping type is {0}, expected {1}.",
+					hdr.Type,
+					AkSoundBankStringMappingBase.StringType.Bank));
+			}
 
 			uint bank_id = uint.MaxValue;
 			string str = null;
@@ -27,7 +27,12 @@ namespace KSoft.Wwise.SoundBank
 		}
 		public override void Serialize(IO.EndianStream s, AkSubchunkHeader header)
 		{
-			Contract.Assert(s.IsReading);
+			if (!s.IsReading)
+			{
+				throw new System.InvalidOperationException(string.Format(
+					"String mapping serialization requires a readable stream; stream mode is {0}.",
+					s.StreamMode));
+			}
 
 			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner);
 

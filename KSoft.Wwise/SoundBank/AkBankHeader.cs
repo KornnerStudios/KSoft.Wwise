@@ -1,10 +1,4 @@
-﻿#if CONTRACTS_FULL_SHIM
-using Contract = System.Diagnostics.ContractsShim.Contract;
-#else
-using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
-#endif
-
-namespace KSoft.Wwise.SoundBank
+﻿namespace KSoft.Wwise.SoundBank
 {
 	partial class AkSoundBank
 	{
@@ -18,7 +12,12 @@ namespace KSoft.Wwise.SoundBank
 			#region IEndianStreamSerializable Members
 			void SerializeOld(IO.EndianStream s)
 			{
-				Contract.Assert(s.IsReading);
+				if (!s.IsReading)
+				{
+					throw new System.InvalidOperationException(string.Format(
+						"Old bank header serialization requires a readable stream; stream mode is {0}.",
+						s.StreamMode));
+				}
 
 				s.Pad32(); // Type; 0 or 1 (Init.bk)
 				s.Pad32(); // LanguageID?

@@ -1,10 +1,4 @@
-﻿#if CONTRACTS_FULL_SHIM
-using Contract = System.Diagnostics.ContractsShim.Contract;
-#else
-using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
-#endif
-
-namespace KSoft.Wwise.SoundBank
+﻿namespace KSoft.Wwise.SoundBank
 {
 	sealed class AkSoundBankStringMapping2007
 		: AkSoundBankStringMappingBase
@@ -49,7 +43,13 @@ namespace KSoft.Wwise.SoundBank
 
 				long eos = EndOfStream(s, mHeader);
 				SerializeGroupEntries(s);
-				Contract.Assert(s.BaseStream.Position == eos);
+				if (s.BaseStream.Position != eos)
+				{
+					throw new System.IO.InvalidDataException(string.Format(
+						"String group ended at position {0}, expected {1}.",
+						s.BaseStream.Position,
+						eos));
+				}
 			}
 			#endregion
 		};
@@ -89,7 +89,12 @@ namespace KSoft.Wwise.SoundBank
 
 		public override void Serialize(IO.EndianStream s, AkSubchunkHeader header)
 		{
-			Contract.Assert(s.IsReading);
+			if (!s.IsReading)
+			{
+				throw new System.InvalidOperationException(string.Format(
+					"String mapping 2007 serialization requires a readable stream; stream mode is {0}.",
+					s.StreamMode));
+			}
 
 			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner);
 

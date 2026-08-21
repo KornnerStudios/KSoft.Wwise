@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contracts = System.Diagnostics.Contracts;
-#if CONTRACTS_FULL_SHIM
-using Contract = System.Diagnostics.ContractsShim.Contract;
-#else
-using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
-#endif
 
 namespace KSoft.Wwise.SoundBank
 {
@@ -86,12 +80,17 @@ namespace KSoft.Wwise.SoundBank
 		}
 
 		#region IEndianStreamSerializable Members
-		[Contracts.Pure]
 		bool EndOfStream(IO.EndianStream s)
 		{
 			if (s.IsReading)
 			{
-				Contract.Assert(s.BaseStream.Position <= mEndOfStream);
+				if (s.BaseStream.Position > mEndOfStream)
+				{
+					throw new System.IO.InvalidDataException(string.Format(
+						"Sound bank stream position is {0}, expected no more than {1}.",
+						s.BaseStream.Position,
+						mEndOfStream));
+				}
 				return s.BaseStream.Position == mEndOfStream;
 			}
 
