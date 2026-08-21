@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-#if CONTRACTS_FULL_SHIM
-using Contract = System.Diagnostics.ContractsShim.Contract;
-#else
-using Contract = System.Diagnostics.Contracts.Contract; // SHIM'D
-#endif
 
 namespace KSoft.Wwise.FilePackage
 {
@@ -18,9 +13,9 @@ namespace KSoft.Wwise.FilePackage
 		public AkFilePackageExtractor(string packageFileName, AkFilePackage package,
 			IReadOnlyDictionary<uint, string> eventToSoundNameMap)
 		{
-			Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(packageFileName));
-			Contract.Requires<ArgumentNullException>(package != null);
-			Contract.Requires<ArgumentNullException>(eventToSoundNameMap != null);
+			ArgumentException.ThrowIfNullOrEmpty(packageFileName);
+			ArgumentNullException.ThrowIfNull(package);
+			ArgumentNullException.ThrowIfNull(eventToSoundNameMap);
 
 			PackageFileName = packageFileName;
 			Package = package;
