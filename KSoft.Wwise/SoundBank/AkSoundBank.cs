@@ -35,8 +35,8 @@ namespace KSoft.Wwise.SoundBank
 		#endregion
 
 		readonly long mStreamOffset, mEndOfStream;
-		internal readonly FilePackage.AkFilePackage mPackage;
-		readonly Dictionary<uint, string> mIdToName;
+		internal readonly FilePackage.AkFilePackage? mPackage;
+		readonly Dictionary<uint, string?>? mIdToName;
 
 		#region Header
 		AkSubchunkHeader mHeaderChunkHeader;
@@ -49,13 +49,12 @@ namespace KSoft.Wwise.SoundBank
 		#endregion
 		readonly Dictionary<AkSubchunkHeader, AkSoundBankObjectBase> mChunks = new();
 
-		internal AkSoundBankData mData;
-		internal AkSoundBankDataIndex mDataIndex;
+		internal AkSoundBankData? mData;
 
 		// TODO: mPackage can be null, need to get around this...
-		public uint SdkVersion => mPackage.Settings.SdkVersion;
+		public uint SdkVersion => mPackage!.Settings.SdkVersion;
 
-		public AkSoundBank(long fileSize, long fileOffset = 0, FilePackage.AkFilePackage package = null)
+		public AkSoundBank(long fileSize, long fileOffset = 0, FilePackage.AkFilePackage? package = null)
 		{
 			mStreamOffset = fileOffset;
 			mEndOfStream = fileOffset + fileSize;
@@ -63,11 +62,11 @@ namespace KSoft.Wwise.SoundBank
 
 			if (package == null)
 			{
-				mIdToName = new Dictionary<uint,string>();
+				mIdToName = new Dictionary<uint, string?>();
 			}
 		}
 
-		internal void MapIdToName(uint id, string name)
+		internal void MapIdToName(uint id, string? name)
 		{
 			if (mPackage != null)
 			{
@@ -75,7 +74,7 @@ namespace KSoft.Wwise.SoundBank
 			}
 			else
 			{
-				mIdToName.Add(id, name);
+				mIdToName!.Add(id, name);
 			}
 		}
 
@@ -166,8 +165,7 @@ namespace KSoft.Wwise.SoundBank
 				}
 				else if (chunk.Value is AkSoundBankDataIndex dataIndex)
 				{
-					mDataIndex = dataIndex;
-					foreach (var media in mDataIndex.LoadedMedia)
+					foreach (var media in dataIndex.LoadedMedia)
 					{
 						if (!extractor.mUntouched.ContainsKey(media.ID))
 						{

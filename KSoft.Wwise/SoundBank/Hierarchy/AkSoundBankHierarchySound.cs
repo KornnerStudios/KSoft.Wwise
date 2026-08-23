@@ -6,7 +6,7 @@ namespace KSoft.Wwise.SoundBank
 	{
 		public AkBankSourceData Source = new();
 
-		public string Name;
+		public string? Name;
 		public uint BankId;
 
 		public override void Serialize(IO.EndianStream s)

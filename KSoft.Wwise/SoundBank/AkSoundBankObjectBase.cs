@@ -19,7 +19,7 @@ namespace KSoft.Wwise.SoundBank
 		static readonly Values.GroupTagData32 kEnvSettingsSignature = new(
 			"ENVS", "audiokinetic_env_settings"); // BankEnvSettingChunkID
 
-		public static AkSoundBankObjectBase New(uint chunkId, uint generatorVersion)
+		public static AkSoundBankObjectBase? New(uint chunkId, uint generatorVersion)
 		{
 				 if (chunkId == kHierarchySignature.ID)		{ return NewHIRC(generatorVersion); }
 			else if (chunkId == kStringMappingSignature.ID)	{ return NewSTID(generatorVersion); }

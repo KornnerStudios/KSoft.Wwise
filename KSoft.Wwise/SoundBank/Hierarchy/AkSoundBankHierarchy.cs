@@ -32,7 +32,7 @@ namespace KSoft.Wwise.SoundBank
 			#region IEndianStreamSerializable Members
 			public void Serialize(IO.EndianStream s)
 			{
-				uint sdk_ver = (KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner)).SdkVersion;
+				uint sdk_ver = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!).SdkVersion;
 
 				s.Stream(ref Type, AkVersion.HircTypeIs8bit(sdk_ver)
 					? HircTypeStreamer8.Instance
@@ -56,8 +56,7 @@ namespace KSoft.Wwise.SoundBank
 					continue;
 				}
 
-				if (!extractor.mObjects.TryGetValue(type,
-						out Dictionary<uint, AkSoundBankHierarchyObjectBase> dic))
+				if (!extractor.mObjects.TryGetValue(type, out var dic))
 				{
 					extractor.mObjects.Add(type, dic = new Dictionary<uint, AkSoundBankHierarchyObjectBase>());
 				}
@@ -78,8 +77,7 @@ namespace KSoft.Wwise.SoundBank
 
 		void MapObject(HircType type, AkSoundBankHierarchyObjectBase obj)
 		{
-			if (!mObjects.TryGetValue(type,
-					out Dictionary<uint, AkSoundBankHierarchyObjectBase> dic))
+			if (!mObjects.TryGetValue(type, out var dic))
 			{
 				mObjects.Add(type, dic = new Dictionary<uint, AkSoundBankHierarchyObjectBase>());
 			}
@@ -111,7 +109,7 @@ namespace KSoft.Wwise.SoundBank
 		}
 		void FromStream(IO.EndianStream s, AkSubchunkHeader header)
 		{
-			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner);
+			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!);
 			Util.MarkUnusedVariable(ref bank);
 
 			using (s.EnterVirtualBufferWithBookmark(header.ChunkSize))

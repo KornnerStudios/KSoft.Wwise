@@ -41,7 +41,7 @@ namespace KSoft.Wwise.FilePackage
 
 		public void Serialize(IO.EndianStream s)
 		{
-			var settings = (KSoft.Debug.TypeCheck.CastReference<AkFilePackage>(s.Owner)).Settings;
+			var settings = KSoft.Debug.TypeCheck.CastReference<AkFilePackage>(s.Owner!).Settings;
 
 			if (AkVersion.HasWordSizeDependentLUT(settings.SdkVersion))
 			{

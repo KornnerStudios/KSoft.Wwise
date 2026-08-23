@@ -4,9 +4,9 @@ namespace KSoft.Wwise.SoundBank
 	sealed class AkSoundBankHierarchyEvent
 		: AkSoundBankHierarchyObjectBase
 	{
-		public uint[] ActionList;
+		public uint[] ActionList = null!;
 
-		public string Name;
+		public string? Name;
 
 		public override void Serialize(IO.EndianStream s)
 		{

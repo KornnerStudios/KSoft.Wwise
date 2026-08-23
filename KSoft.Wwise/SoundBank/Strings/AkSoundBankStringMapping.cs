@@ -18,10 +18,10 @@
 			}
 
 			uint bank_id = uint.MaxValue;
-			string str = null;
+			string? str = null;
 
 			s.Stream(ref bank_id);
-			s.Stream(ref str, kStringEncoding);
+			s.Stream(ref str!, kStringEncoding);
 
 			bank.MapIdToName(bank_id, str);
 		}
@@ -34,7 +34,7 @@
 					s.StreamMode));
 			}
 
-			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner);
+			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!);
 
 			long eos = EndOfStream(s, header);
 

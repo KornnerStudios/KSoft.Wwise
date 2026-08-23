@@ -35,7 +35,7 @@
 		};
 
 		byte NumFx;
-		FXData[] FX;
+		FXData[] FX = null!;
 
 		public uint OverrideBusId, DirectParentID;
 		byte Priority;
@@ -117,7 +117,7 @@
 		}
 		void SerializeFeedbackInfo(IO.EndianStream s)
 		{
-			if (!KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner).HasFeedback)
+			if (!KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!).HasFeedback)
 			{
 				return;
 			}

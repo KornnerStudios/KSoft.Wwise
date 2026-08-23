@@ -5,7 +5,7 @@ namespace KSoft.Wwise.SoundBank
 		: AkSoundBankHierarchyObjectBase
 	{
 		public CAkParameterNodeBase ParameterNode = new();
-		public AkPlaylistItem[] Playlist;
+		public AkPlaylistItem[]? Playlist;
 
 		void SerializeHack2008(IO.EndianStream s)
 		{
@@ -53,7 +53,7 @@ namespace KSoft.Wwise.SoundBank
 		{
 			base.Serialize(s);
 
-			uint gen_ver = (KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner)).GeneratorVersion;
+			uint gen_ver = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!).GeneratorVersion;
 
 			if (gen_ver == AkVersion.k2008.BankGenerator)
 			{

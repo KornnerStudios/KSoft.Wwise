@@ -7,7 +7,7 @@ namespace KSoft.Wwise.FilePackage
 		: IO.IEndianStreamSerializable
 		, IEnumerable<AkFileLookupTableEntry>
 	{
-		AkFileLookupTableEntry[] mEntries;
+		AkFileLookupTableEntry[] mEntries = null!;
 
 		internal uint TotalSize;
 

@@ -11,13 +11,11 @@ namespace KSoft.Wwise.FilePackage
 		readonly AkLanguageMap mLangMap;
 		readonly AkFileLookupTable mSoundBanksTable = new();
 		readonly AkFileLookupTable mStreamedFilesTable = new();
-		readonly AkFileLookupTable mExternalFilesTable;
+		readonly AkFileLookupTable? mExternalFilesTable;
 
-		SoundBank.AkSoundBank[] mSoundBanks;
-		Dictionary<uint, string> mIdToName;
-		List<KeyValuePair<uint, string>> mIdToNameDups;
-
-		bool HasExternalFiles => mExternalFilesTable != null;
+		SoundBank.AkSoundBank[] mSoundBanks = null!;
+		Dictionary<uint, string?> mIdToName = null!;
+		List<KeyValuePair<uint, string?>> mIdToNameDups = null!;
 
 		public AkFilePackage(AkFilePackageSettings settings)
 		{
@@ -31,16 +29,16 @@ namespace KSoft.Wwise.FilePackage
 			}
 		}
 
-		public IReadOnlyDictionary<uint, string> IdToName => mIdToName;
+		public IReadOnlyDictionary<uint, string?> IdToName => mIdToName;
 		public IEnumerable<SoundBank.AkSoundBank> SoundBanks => mSoundBanks;
 
-		internal void MapIdToName(uint id, string name)
+		internal void MapIdToName(uint id, string? name)
 		{
-			if (mIdToName.TryGetValue(id, out string existing_name))
+			if (mIdToName.TryGetValue(id, out string? existing_name))
 			{
 				if (existing_name != name)
 				{
-					mIdToNameDups.Add(new KeyValuePair<uint, string>(id, name));
+					mIdToNameDups.Add(new KeyValuePair<uint, string?>(id, name));
 				}
 			}
 			else
@@ -68,11 +66,11 @@ namespace KSoft.Wwise.FilePackage
 			s.Stream(ref mLangMap.TotalMapSize);
 			s.Stream(ref mSoundBanksTable.TotalSize);
 			s.Stream(ref mStreamedFilesTable.TotalSize);
-			if (HasExternalFiles) { s.Stream(ref mExternalFilesTable.TotalSize); }
+			if (mExternalFilesTable is not null) { s.Stream(ref mExternalFilesTable.TotalSize); }
 			s.Stream(mLangMap);
 			s.Stream(mSoundBanksTable);
 			s.Stream(mStreamedFilesTable);
-			if (HasExternalFiles) { s.Stream(mExternalFilesTable); }
+			if (mExternalFilesTable is not null) { s.Stream(mExternalFilesTable); }
 		}
 
 		public void SerializeSoundBanks(IO.EndianStream s)
@@ -80,8 +78,8 @@ namespace KSoft.Wwise.FilePackage
 			if (s.IsReading)
 			{
 				mSoundBanks = new SoundBank.AkSoundBank[mSoundBanksTable.Count];
-				mIdToName = new Dictionary<uint, string>(mSoundBanks.Length);
-				mIdToNameDups = new List<KeyValuePair<uint, string>>();
+				mIdToName = new Dictionary<uint, string?>(mSoundBanks.Length);
+				mIdToNameDups = new List<KeyValuePair<uint, string?>>();
 				for (int x = 0; x < mSoundBanksTable.Count; x++)
 				{
 					var entry = mSoundBanksTable[x];

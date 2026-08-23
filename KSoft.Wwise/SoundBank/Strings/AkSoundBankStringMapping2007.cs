@@ -22,7 +22,7 @@
 			: IO.IEndianStreamSerializable
 		{
 			AKBKHashHeader mHeader;
-			public StringHashEntry[] Entries;
+			public StringHashEntry[] Entries = null!;
 
 			public uint ID => mHeader.Hash;
 
@@ -54,7 +54,7 @@
 			#endregion
 		};
 
-		public StringHashEntry[] Events;
+		public StringHashEntry[] Events = null!;
 
 		static void SerializeEntries(IO.EndianStream s, ref StringHashEntry[] entries)
 		{
@@ -96,7 +96,7 @@
 					s.StreamMode));
 			}
 
-			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner);
+			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!);
 
 			long eos = EndOfStream(s, header);
 

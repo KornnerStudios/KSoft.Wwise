@@ -19,7 +19,7 @@ namespace KSoft.Wwise.SoundBank
 	sealed class AkSoundBankData
 		: AkSoundBankObjectBase
 	{
-		public byte[] Buffer;
+		public byte[] Buffer = null!;
 
 		public override void Serialize(IO.EndianStream s, AkSubchunkHeader header)
 		{

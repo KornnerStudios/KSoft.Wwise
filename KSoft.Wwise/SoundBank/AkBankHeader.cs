@@ -28,7 +28,7 @@
 			}
 			public void Serialize(IO.EndianStream s)
 			{
-				uint sdk_ver = (KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner)).SdkVersion;
+				uint sdk_ver = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!).SdkVersion;
 
 				if (AkVersion.HasOldBankHeader(sdk_ver))
 				{

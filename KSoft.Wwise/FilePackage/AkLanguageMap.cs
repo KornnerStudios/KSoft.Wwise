@@ -6,7 +6,7 @@ namespace KSoft.Wwise.FilePackage
 	{
 		const int kAlignmentBit = 2;
 
-		AkLanguageMapEntry[] mEntries;
+		AkLanguageMapEntry[] mEntries = null!;
 
 		readonly bool mUseAsciiStrings;
 

@@ -19,7 +19,7 @@ namespace KSoft.Wwise.SoundBank
 	sealed class AkSoundBankDataIndex
 		: AkSoundBankObjectBase
 	{
-		public AkMediaHeader[] LoadedMedia;
+		public AkMediaHeader[] LoadedMedia = null!;
 
 		public override void Serialize(IO.EndianStream s, AkSubchunkHeader header)
 		{
