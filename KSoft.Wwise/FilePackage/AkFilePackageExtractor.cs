@@ -91,7 +91,7 @@ namespace KSoft.Wwise.FilePackage
 					switch (target)
 					{
 						case SoundBank.AkSoundBankHierarchySound sound:
-							sound.Name = eventName.Replace("play_", "");
+							sound.Name = eventName.Replace("play_", "", StringComparison.Ordinal);
 							break;
 						case SoundBank.AkSoundBankHierarchyRanSeqCntr ranSeq:
 						{
@@ -102,7 +102,7 @@ namespace KSoft.Wwise.FilePackage
 									if (mIdToObject.TryGetValue(item.ID, out var itemObj) &&
 										itemObj is SoundBank.AkSoundBankHierarchySound itemSound)
 									{
-										itemSound.Name = eventName.Replace("play_", "") + "_" + item.ID.ToString("X8");
+										itemSound.Name = eventName.Replace("play_", "", StringComparison.Ordinal) + "_" + item.ID.ToString("X8");
 									}
 									else
 									{
