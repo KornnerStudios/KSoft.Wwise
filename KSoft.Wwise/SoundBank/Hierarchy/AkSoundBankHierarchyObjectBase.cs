@@ -7,7 +7,7 @@ namespace KSoft.Wwise.SoundBank
 		public uint ID;
 
 		#region Factory
-		class AkSoundBankHierarchyDefaultImpl
+		sealed class AkSoundBankHierarchyDefaultImpl
 			: AkSoundBankHierarchyObjectBase
 		{
 			readonly HircType mType;

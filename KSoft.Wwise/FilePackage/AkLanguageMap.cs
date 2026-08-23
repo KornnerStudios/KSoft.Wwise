@@ -4,6 +4,7 @@ namespace KSoft.Wwise.FilePackage
 	public sealed class AkLanguageMap
 		: IO.IEndianStreamSerializable
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Retains package format alignment-bit documentation.")]
 		const int kAlignmentBit = 2;
 
 		AkLanguageMapEntry[] mEntries = null!;

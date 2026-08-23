@@ -11,11 +11,14 @@ namespace KSoft.Wwise.SoundBank
 		public abstract void Serialize(IO.EndianStream s, AkSubchunkHeader header);
 
 		#region Factory
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Retains sound-bank protocol signature reference data.")]
 		static readonly Values.GroupTagData32 kGlobalSettingsSignature = new(
 			"STMG", "audiokinetic_global_settings"); // BankStateMgrChunkID
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Retains sound-bank protocol signature reference data.")]
 		static readonly Values.GroupTagData32 kFxParamsSignature = new(
 			"FXPR", "audiokinetic_fx_params"); // BankFXParamsChunkID
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "Retains sound-bank protocol signature reference data.")]
 		static readonly Values.GroupTagData32 kEnvSettingsSignature = new(
 			"ENVS", "audiokinetic_env_settings"); // BankEnvSettingChunkID
 

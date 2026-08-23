@@ -18,6 +18,7 @@
 			}
 			#endregion
 		};
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Retained as intentional 2007 sound-bank format serialization scaffolding.")]
 		public class StringGroup
 			: IO.IEndianStreamSerializable
 		{
