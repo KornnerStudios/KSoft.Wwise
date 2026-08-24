@@ -31,6 +31,7 @@ namespace KSoft.Wwise.SoundBank
 			None,
 			Bank,
 
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "Legacy Wwise event string type aliases the bank string type code.")]
 			OldEvents = 1,
 			Old2, // states?
 			Old3, // skip
