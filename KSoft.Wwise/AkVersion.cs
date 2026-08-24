@@ -11,6 +11,7 @@ namespace KSoft.Wwise
 			//2006.3.1
 		};
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Version groups preserve the Wwise SDK hierarchy in the public API.")]
 		public static class k2007
 		{
 			public const uint Id = 0x20070000;
@@ -25,6 +26,7 @@ namespace KSoft.Wwise
 			public const uint BankGenerator = 0x1A; // HaloWars alpha2 build
 		};
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Version groups preserve the Wwise SDK hierarchy in the public API.")]
 		public static class k2008
 		{
 			public const uint Id = 0x20080000;
@@ -37,6 +39,7 @@ namespace KSoft.Wwise
 			public const uint BankGenerator = 0x22; //34 HaloWars retail
 		};
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Version groups preserve the Wwise SDK hierarchy in the public API.")]
 		public static class k2009
 		{
 			public const uint Id = 0x20090000;
@@ -47,6 +50,7 @@ namespace KSoft.Wwise
 			//2009.3
 		};
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Version groups preserve the Wwise SDK hierarchy in the public API.")]
 		public static class k2010
 		{
 			//2010.1
@@ -60,6 +64,7 @@ namespace KSoft.Wwise
 			public const uint BankGenerator_3_3 = 0x35; //53 3773
 		};
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Version groups preserve the Wwise SDK hierarchy in the public API.")]
 		public static class k2011
 		{
 			public const uint Id = 0x20110000;
@@ -74,6 +79,7 @@ namespace KSoft.Wwise
 			//2011.3.1
 		};
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Version groups preserve the Wwise SDK hierarchy in the public API.")]
 		public static class k2012
 		{
 			public const uint Id = 0x20120000;
