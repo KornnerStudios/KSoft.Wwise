@@ -46,10 +46,8 @@
 				SerializeGroupEntries(s);
 				if (s.BaseStream.Position != eos)
 				{
-					throw new System.IO.InvalidDataException(string.Format(
-						"String group ended at position {0}, expected {1}.",
-						s.BaseStream.Position,
-						eos));
+					throw new System.IO.InvalidDataException(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+						$"String group ended at position {s.BaseStream.Position}, expected {eos}."));
 				}
 			}
 			#endregion
@@ -92,9 +90,8 @@
 		{
 			if (!s.IsReading)
 			{
-				throw new System.InvalidOperationException(string.Format(
-					"String mapping 2007 serialization requires a readable stream; stream mode is {0}.",
-					s.StreamMode));
+				throw new System.InvalidOperationException(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+					$"String mapping 2007 serialization requires a readable stream; stream mode is {s.StreamMode}."));
 			}
 
 			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!);

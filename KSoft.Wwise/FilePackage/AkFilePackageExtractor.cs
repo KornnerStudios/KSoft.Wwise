@@ -102,27 +102,28 @@ namespace KSoft.Wwise.FilePackage
 									if (mIdToObject.TryGetValue(item.ID, out var itemObj) &&
 										itemObj is SoundBank.AkSoundBankHierarchySound itemSound)
 									{
-										itemSound.Name = eventName.Replace("play_", "", StringComparison.Ordinal) + "_" + item.ID.ToString("X8");
+										itemSound.Name = string.Create(System.Globalization.CultureInfo.InvariantCulture,
+											$"{eventName.Replace("play_", "", StringComparison.Ordinal)}_{item.ID:X8}");
 									}
 									else
 									{
-										Debug.Trace.FilePackage.TraceInformation("{0} - {1}: couldn't name item {2} {3}",
-											PackageFileName, eventName, item.ID.ToString("X8"), item.GetType().Name);
+										Debug.Trace.FilePackage.TraceInformation(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+											$"{PackageFileName} - {eventName}: couldn't name item {item.ID:X8} {item.GetType().Name}"));
 									}
 								}
 							}
 							else
 							{
-								Debug.Trace.FilePackage.TraceInformation("{0} - {1}: couldn't name playlist {2} {3}",
-									PackageFileName, eventName, target.ID.ToString("X8"), SoundBank.HircType.RanSeqCntr.ToString());
+								Debug.Trace.FilePackage.TraceInformation(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+									$"{PackageFileName} - {eventName}: couldn't name playlist {target.ID:X8} {SoundBank.HircType.RanSeqCntr}"));
 							}
 
 							break;
 						}
 
 						default:
-							Debug.Trace.FilePackage.TraceInformation("{0} - {1}: couldn't name {2} {3}",
-								PackageFileName, eventName, target.ID.ToString("X8"), target.ToString());
+							Debug.Trace.FilePackage.TraceInformation(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+								$"{PackageFileName} - {eventName}: couldn't name {target.ID:X8} {target}"));
 							break;
 					}
 				}
@@ -157,12 +158,14 @@ namespace KSoft.Wwise.FilePackage
 				}
 
 				string dir;
-				string filename = (snd.Name ?? ("unknown_" + kv.Key.ToString("X8"))) + ".xma";
+				string filename = snd.Name is null
+					? string.Create(System.Globalization.CultureInfo.InvariantCulture, $"unknown_{kv.Key:X8}.xma")
+					: snd.Name + ".xma";
 
 				uint bank_id = snd.BankId;
 				if (!Package.IdToName.TryGetValue(bank_id, out string? bank_name))
 				{
-					bank_name = bank_id.ToString("X8");
+					bank_name = bank_id.ToString("X8", System.Globalization.CultureInfo.InvariantCulture);
 				}
 
 				SoundBank.AkSoundBankData? bank_data = null;
@@ -204,7 +207,7 @@ namespace KSoft.Wwise.FilePackage
 			{
 				var mr = kv.Value;
 
-				string name = "unknown2_" + mr.Media.ID.ToString("X8");
+				string name = string.Create(System.Globalization.CultureInfo.InvariantCulture, $"unknown2_{mr.Media.ID:X8}");
 				if (mr.Media.Size == 0)
 				{
 					towav.WriteLine("REM NoData2 {0}", name);
@@ -216,7 +219,7 @@ namespace KSoft.Wwise.FilePackage
 				uint bank_id = mr.BankId;
 				if (!Package.IdToName.TryGetValue(bank_id, out string? bank_name))
 				{
-					bank_name = bank_id.ToString("X8");
+					bank_name = bank_id.ToString("X8", System.Globalization.CultureInfo.InvariantCulture);
 				}
 
 				SoundBank.AkSoundBankData? bank_data = mIdToBank[bank_id].mData;

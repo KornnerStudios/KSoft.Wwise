@@ -85,10 +85,8 @@ namespace KSoft.Wwise.SoundBank
 			{
 				if (s.BaseStream.Position > mEndOfStream)
 				{
-					throw new System.IO.InvalidDataException(string.Format(
-						"Sound bank stream position is {0}, expected no more than {1}.",
-						s.BaseStream.Position,
-						mEndOfStream));
+					throw new System.IO.InvalidDataException(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+						$"Sound bank stream position is {s.BaseStream.Position}, expected no more than {mEndOfStream}."));
 				}
 				return s.BaseStream.Position == mEndOfStream;
 			}

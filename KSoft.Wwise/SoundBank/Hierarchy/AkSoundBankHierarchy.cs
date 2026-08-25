@@ -91,9 +91,8 @@ namespace KSoft.Wwise.SoundBank
 		{
 			if (!s.IsReading)
 			{
-				throw new System.InvalidOperationException(string.Format(
-					"Hierarchy item serialization requires a readable stream; stream mode is {0}.",
-					s.StreamMode));
+				throw new System.InvalidOperationException(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+					$"Hierarchy item serialization requires a readable stream; stream mode is {s.StreamMode}."));
 			}
 
 			using (s.EnterVirtualBufferWithBookmark(section.SectionSize))

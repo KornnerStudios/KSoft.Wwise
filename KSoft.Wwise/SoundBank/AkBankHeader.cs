@@ -14,9 +14,8 @@
 			{
 				if (!s.IsReading)
 				{
-					throw new System.InvalidOperationException(string.Format(
-						"Old bank header serialization requires a readable stream; stream mode is {0}.",
-						s.StreamMode));
+					throw new System.InvalidOperationException(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+						$"Old bank header serialization requires a readable stream; stream mode is {s.StreamMode}."));
 				}
 
 				s.Pad32(); // Type; 0 or 1 (Init.bk)

@@ -55,9 +55,8 @@
 			s.Stream(ref NumFx);
 			if (NumFx > 4)
 			{
-				throw new System.IO.InvalidDataException(string.Format(
-					"Parameter node FX count is {0}, maximum is 4.",
-					NumFx));
+				throw new System.IO.InvalidDataException(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+					$"Parameter node FX count is {NumFx}, maximum is 4."));
 			}
 			if (s.IsReading)
 			{

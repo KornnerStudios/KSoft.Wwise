@@ -11,10 +11,8 @@
 		{
 			if (hdr.Type != AkSoundBankStringMappingBase.StringType.Bank)
 			{
-				throw new System.IO.InvalidDataException(string.Format(
-					"String mapping type is {0}, expected {1}.",
-					hdr.Type,
-					AkSoundBankStringMappingBase.StringType.Bank));
+				throw new System.IO.InvalidDataException(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+					$"String mapping type is {hdr.Type}, expected {AkSoundBankStringMappingBase.StringType.Bank}."));
 			}
 
 			uint bank_id = uint.MaxValue;
@@ -29,9 +27,8 @@
 		{
 			if (!s.IsReading)
 			{
-				throw new System.InvalidOperationException(string.Format(
-					"String mapping serialization requires a readable stream; stream mode is {0}.",
-					s.StreamMode));
+				throw new System.InvalidOperationException(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+					$"String mapping serialization requires a readable stream; stream mode is {s.StreamMode}."));
 			}
 
 			var bank = KSoft.Debug.TypeCheck.CastReference<AkSoundBank>(s.Owner!);
