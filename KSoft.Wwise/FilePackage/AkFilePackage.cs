@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace KSoft.Wwise.FilePackage
 {
@@ -19,6 +20,8 @@ namespace KSoft.Wwise.FilePackage
 
 		public AkFilePackage(AkFilePackageSettings settings)
 		{
+			ArgumentNullException.ThrowIfNull(settings);
+
 			Settings = settings;
 
 			mLangMap = new AkLanguageMap(settings.UseAsciiStrings);

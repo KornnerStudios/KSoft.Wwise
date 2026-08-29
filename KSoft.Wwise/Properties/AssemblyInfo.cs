@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -9,3 +10,6 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e5f0deec-88d8-4cc2-bbd7-70fafa361957")]
+[assembly: SuppressMessage("Design",
+	"CA1062:Validate arguments of public methods",
+	Justification = "Public sound-bank serialization APIs require caller-established non-null stream/model contracts")]

@@ -133,6 +133,9 @@ namespace KSoft.Wwise.FilePackage
 		public void ExtractSounds(string path, System.IO.StreamWriter towav, IO.EndianReader pckReader,
 			bool overwriteExisting = false)
 		{
+			ArgumentNullException.ThrowIfNull(towav);
+			ArgumentNullException.ThrowIfNull(pckReader);
+
 			if (!mObjects.TryGetValue(SoundBank.HircType.Sound, out var sounds))
 			{
 				Debug.Trace.FilePackage.TraceInformation("{0} - No sounds to extract?",
