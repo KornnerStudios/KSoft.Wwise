@@ -69,27 +69,27 @@ namespace KSoft.Wwise.SoundBank
 		}
 
 		public AkSoundBank(long fileSize, long fileOffset = 0, FilePackage.AkFilePackage? package = null)
-			: this(fileSize, fileOffset, package, standaloneSdkVersion: null)
-		{
-		}
-		/// <summary>Initializes a standalone sound bank with the SDK version needed to parse its binary layout.</summary>
-		/// <remarks>Use the named <paramref name="sdkVersion"/> argument with numeric literals to avoid ambiguity with the package-backed constructor's <paramref name="fileOffset"/> parameter.</remarks>
-		public AkSoundBank(long fileSize, uint sdkVersion, long fileOffset = 0)
-			: this(fileSize, fileOffset, package: null, standaloneSdkVersion: sdkVersion)
-		{
-		}
-		AkSoundBank(long fileSize, long fileOffset, FilePackage.AkFilePackage? package,
-			uint? standaloneSdkVersion)
 		{
 			mStreamOffset = fileOffset;
 			mEndOfStream = fileOffset + fileSize;
 			mPackage = package;
-			mStandaloneSdkVersion = standaloneSdkVersion;
 
 			if (package == null)
 			{
 				mIdToName = new Dictionary<uint, string?>();
 			}
+		}
+		/// <summary>Creates a standalone sound bank with the SDK version needed to parse its binary layout.</summary>
+		public static AkSoundBank CreateStandalone(long fileSize, uint sdkVersion, long fileOffset = 0)
+		{
+			return new AkSoundBank(fileSize, fileOffset, standaloneSdkVersion: sdkVersion);
+		}
+		AkSoundBank(long fileSize, long fileOffset, uint standaloneSdkVersion)
+		{
+			mStreamOffset = fileOffset;
+			mEndOfStream = fileOffset + fileSize;
+			mStandaloneSdkVersion = standaloneSdkVersion;
+			mIdToName = new Dictionary<uint, string?>();
 		}
 
 		internal void MapIdToName(uint id, string? name)
