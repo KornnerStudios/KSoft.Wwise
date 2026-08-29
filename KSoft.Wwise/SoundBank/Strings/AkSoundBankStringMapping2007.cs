@@ -19,6 +19,7 @@
 			#endregion
 		};
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Retained as intentional 2007 sound-bank format serialization scaffolding.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Seal internal types", Justification = "Sound-bank serialization model retained for the 2007 format.")]
 		public class StringGroup
 			: IO.IEndianStreamSerializable
 		{
