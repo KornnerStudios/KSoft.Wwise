@@ -37,6 +37,7 @@ namespace KSoft.Wwise.SoundBank
 		readonly long mStreamOffset, mEndOfStream;
 		internal readonly FilePackage.AkFilePackage? mPackage;
 		readonly Dictionary<uint, string?>? mIdToName;
+		readonly uint? mStandaloneSdkVersion;
 
 		#region Header
 		AkSubchunkHeader mHeaderChunkHeader;
@@ -51,14 +52,39 @@ namespace KSoft.Wwise.SoundBank
 
 		internal AkSoundBankData? mData;
 
-		// TODO: mPackage can be null, need to get around this...
-		public uint SdkVersion => mPackage!.Settings.SdkVersion;
+		const string kStandaloneSdkVersionRequiredMessage =
+			"Standalone sound bank parsing requires an SDK version.";
+		public uint SdkVersion
+		{
+			get
+			{
+				if (mPackage != null)
+				{
+					return mPackage.Settings.SdkVersion;
+				}
+
+				return mStandaloneSdkVersion ?? throw new InvalidOperationException(
+					kStandaloneSdkVersionRequiredMessage);
+			}
+		}
 
 		public AkSoundBank(long fileSize, long fileOffset = 0, FilePackage.AkFilePackage? package = null)
+			: this(fileSize, fileOffset, package, standaloneSdkVersion: null)
+		{
+		}
+		/// <summary>Initializes a standalone sound bank with the SDK version needed to parse its binary layout.</summary>
+		/// <remarks>Use the named <paramref name="sdkVersion"/> argument with numeric literals to avoid ambiguity with the package-backed constructor's <paramref name="fileOffset"/> parameter.</remarks>
+		public AkSoundBank(long fileSize, uint sdkVersion, long fileOffset = 0)
+			: this(fileSize, fileOffset, package: null, standaloneSdkVersion: sdkVersion)
+		{
+		}
+		AkSoundBank(long fileSize, long fileOffset, FilePackage.AkFilePackage? package,
+			uint? standaloneSdkVersion)
 		{
 			mStreamOffset = fileOffset;
 			mEndOfStream = fileOffset + fileSize;
 			mPackage = package;
+			mStandaloneSdkVersion = standaloneSdkVersion;
 
 			if (package == null)
 			{
@@ -130,7 +156,11 @@ namespace KSoft.Wwise.SoundBank
 				}
 
 				s.Stream(ref mHeader);
-				s.Pad((int)mHeaderChunkHeader.ChunkSize - AkBankHeader.kSizeOf);
+				int header_padding = (int)mHeaderChunkHeader.ChunkSize - AkBankHeader.kSizeOf;
+				if (header_padding != 0)
+				{
+					s.Pad(header_padding);
+				}
 				#endregion
 
 				s.StreamMethods(s, ReadChunks, WriteChunks);
