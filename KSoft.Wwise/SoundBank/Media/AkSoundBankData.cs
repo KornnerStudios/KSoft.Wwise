@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace KSoft.Wwise.SoundBank
 {
 	partial class AkSoundBankObjectBase
@@ -28,7 +29,8 @@ namespace KSoft.Wwise.SoundBank
 				Buffer = new byte[header.ChunkSize];
 			}
 
-			s.Stream(Buffer);
+			ArgumentNullException.ThrowIfNull(Buffer);
+			s.Stream(Buffer.AsSpan());
 		}
 	};
 }
