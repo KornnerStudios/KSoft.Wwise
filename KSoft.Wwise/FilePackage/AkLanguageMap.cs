@@ -34,17 +34,9 @@ namespace KSoft.Wwise.FilePackage
 		#region IEndianStreamSerializable Members
 		public void Serialize(IO.EndianStream s)
 		{
-			Memory.Strings.StringStorage ss;
-			if (mUseAsciiStrings)
-			{
-				ss = Memory.Strings.StringStorage.CStringAscii;
-			}
-			else
-			{
-				ss = s.ByteOrder == Shell.EndianFormat.Little
-					? Memory.Strings.StringStorage.CStringUnicode
-					: Memory.Strings.StringStorage.CStringUnicodeBigEndian;
-			}
+			Memory.Strings.StringStorage ss = mUseAsciiStrings
+				? Memory.Strings.StringStorage.CStringAscii
+				: Memory.Strings.StringStorage.CStringUnicode;
 
 			s.StreamArrayInt32(ref mEntries);
 			for (int x = 0; x < mEntries.Length; x++)

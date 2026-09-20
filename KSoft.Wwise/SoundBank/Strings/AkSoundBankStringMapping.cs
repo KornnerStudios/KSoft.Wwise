@@ -5,7 +5,6 @@
 	{
 		static readonly Memory.Strings.StringStorage kStringStorage = new(
 			Memory.Strings.StringStorageWidthType.Ascii, Memory.Strings.StringStorageLengthPrefix.Int8);
-		static readonly Text.StringStorageEncoding kStringEncoding = new(kStringStorage);
 
 		void SerializeStringType(IO.EndianStream s, AKBKHashHeader hdr, AkSoundBank bank)
 		{
@@ -19,7 +18,7 @@
 			string? str = null;
 
 			s.Stream(ref bank_id);
-			s.Stream(ref str!, kStringEncoding);
+			s.Stream(ref str!, kStringStorage);
 
 			bank.MapIdToName(bank_id, str);
 		}
