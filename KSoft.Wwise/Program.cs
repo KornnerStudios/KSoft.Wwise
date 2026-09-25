@@ -8,5 +8,6 @@ namespace KSoft.Wwise
 {
     public static class Program
     {
+        public static Type DebugTraceClass => typeof(Debug.Trace);
     };
 }
